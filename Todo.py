@@ -38,8 +38,8 @@ def main(stdscr):
     stdscr.clear()
     if listlength == 0:
         inp = curses.newwin(1,50, selected+2,0)
-        txtb = inp.subwin(1, 25, selected+2, 22)
-        inp.addstr("Please input new task:")
+        txtb = inp.subwin(1, 25, selected+2, 23)
+        inp.addstr("Please input new task: ")
         tb = curses.textpad.Textbox(txtb)
         inp.refresh()
         tb.edit()
