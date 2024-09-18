@@ -1,9 +1,32 @@
 import curses
 from curses import wrapper
 from curses.textpad import Textbox, rectangle
+import csv
 
-list = [[("Wash the dishes"),(False)],[("Clean cups"), (False)],[("Mop floor"), (False)],[("Hang clothes"), (False)],[("Go shopping"), (False)],[("Walk Dog"), (False)]]
-  
+list = []
+
+def writetolist():
+    with open("popo2.csv", "w", newline="") as csvfile:
+        csv_write = csv.writer(csvfile)
+        for chore in list:
+            csv_write.writerow(chore)
+        csvfile.close
+
+def readfromlist():
+    with open("popo2.csv", "r") as csvfile:
+        csv_reader = csv.reader(csvfile)
+        for row in csv_reader:
+            if row[1] == "True":
+                tempbool = True
+            else:
+                tempbool = False
+
+            test = [str(row[0]),(tempbool)]
+            list.append(test)
+        csvfile.close
+
+readfromlist()
+
 def main(stdscr):
     x = True
     stdscr.nodelay(True)
@@ -24,6 +47,7 @@ def main(stdscr):
             selected -= 1
         elif key == " " and selected != listlength:
             list[selected][1] = not list[selected][1]
+            writetolist()
         elif key == " " and selected == listlength:
             inp = curses.newwin(1,50, selected+2,0)
             txtb = inp.subwin(1, 25, selected+2, 22)
@@ -35,6 +59,7 @@ def main(stdscr):
             list.append([(tbout),(False)])
             listlength = (len(list))
             selected = selected+1
+            writetolist()
 
         if selected < 0: #Keep selection within the length of the list
             selected = 0
