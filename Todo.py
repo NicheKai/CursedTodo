@@ -6,14 +6,14 @@ import csv
 list = []
 
 def writetolist():
-    with open("popo2.csv", "w", newline="") as csvfile:
+    with open("todolist.csv", "w", newline="") as csvfile:
         csv_write = csv.writer(csvfile)
         for chore in list:
             csv_write.writerow(chore)
         csvfile.close
 
 def readfromlist():
-    with open("popo2.csv", "r") as csvfile:
+    with open("todolist.csv", "r") as csvfile:
         csv_reader = csv.reader(csvfile)
         for row in csv_reader:
             if row[1] == "True":
@@ -25,15 +25,29 @@ def readfromlist():
             list.append(test)
         csvfile.close
 
-readfromlist()
-
+try:
+    readfromlist()
+except:
+    writetolist()
+    
 def main(stdscr):
     x = True
     stdscr.nodelay(True)
     selected = 0
     listlength = (len(list))
     stdscr.clear()
-
+    if listlength == 0:
+        inp = curses.newwin(1,50, selected+2,0)
+        txtb = inp.subwin(1, 25, selected+2, 22)
+        inp.addstr("Please input new task:")
+        tb = curses.textpad.Textbox(txtb)
+        inp.refresh()
+        tb.edit()
+        tbout = tb.gather()
+        list.append([(tbout),(False)])
+        listlength = (len(list))
+        selected = selected+1
+        writetolist()
     while x == True: #Check for user inputs
         try:
             key = stdscr.getkey()
